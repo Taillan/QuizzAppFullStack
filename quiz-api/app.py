@@ -1,8 +1,14 @@
-from flask import Flask, request
-from jwt_utils import build_token, decode_token
 import json
+import sqlite3
+from flask import Flask, request
+from jwt_utils import build_token, verify_token
+from services.QuestionServices import NewQuestionService
 
 app = Flask(__name__)
+
+def get_db_connection():
+	conn = sqlite3.connect('database.db')
+	return conn
 
 @app.route('/')
 def hello_world():
@@ -20,12 +26,19 @@ def Login():
 		password = payload['password']
 	except:
 		return "Not a JSON body, or missing password field", 500
-		
+
 	if password == "Vive l'ESIEE !":
 		response = {"token": build_token()}
 		return json.dumps(response), 200
 	else:
 		return "Wrong password", 401
 
+@app.route('/question', methods=['POST'])
+def NewQuestion():
+	payload = request.get_json()
+	if verify_token(request.headers.get('Authorization')):
+		NewQuestionService(payload)
+
+
 if __name__ == "__main__":
-    app.run(ssl_context='adhoc')
+	app.run(ssl_context='adhoc')

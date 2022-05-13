@@ -49,3 +49,6 @@ def decode_token(auth_token):
         raise JwtError('Signature expired. Please log in again.')
     except jwt.InvalidTokenError as e:
         raise JwtError('Invalid token. Please log in again.')
+
+def verify_token(token):
+    return decode_token(token) == "quiz-app-admin"
