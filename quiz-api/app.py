@@ -1,5 +1,6 @@
 from flask import Flask, request
 from jwt_utils import build_token, decode_token
+import json
 
 app = Flask(__name__)
 
@@ -19,8 +20,10 @@ def Login():
 		password = payload['password']
 	except:
 		return "Not a JSON body, or missing password field", 500
+		
 	if password == "Vive l'ESIEE !":
-		return build_token(), 200
+		response = {"token": build_token()}
+		return json.dumps(response), 200
 	else:
 		return "Wrong password", 401
 
