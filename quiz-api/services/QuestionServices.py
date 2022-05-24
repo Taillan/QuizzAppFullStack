@@ -1,10 +1,13 @@
-from models import Question
+from models.Question import Question
 from dao.QuestionDAO import saveQuestion
 
 def NewQuestionService(payload):
     question = QuestionFromJson(payload)
     saveQuestion(question)
 
+def GetQuestionService(int:id):
+    return 
+    
 def QuestionFromJson(payload):    
     try:
         title = payload['title']
@@ -23,3 +26,4 @@ def QuestionFromJson(payload):
     except:
         image = ""
     return Question(title, text, position, image)
+

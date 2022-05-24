@@ -2,7 +2,7 @@ import json
 import sqlite3
 from flask import Flask, request
 from jwt_utils import build_token, verify_token
-from services.QuestionServices import NewQuestionService
+from services.QuestionServices import NewQuestionService, GetQuestionService
 
 app = Flask(__name__)
 
@@ -33,11 +33,27 @@ def Login():
 	else:
 		return "Wrong password", 401
 
-@app.route('/question', methods=['POST'])
+@app.route('/questions', methods=['POST'])
 def NewQuestion():
 	payload = request.get_json()
 	if verify_token(request.headers.get('Authorization')):
 		NewQuestionService(payload)
+		return "Created", 200
+	else:
+		return "Wrong token", 401
+
+@app.route('/questions/<int:question_id>', methods=['DELETE'])
+def DelQuestion(question_id):
+	if verify_token(request.headers.get('Authorization')):
+		return "Created", 201
+	else:
+		return "Wrong token", 401
+
+@app.route('/questions/<int:question_id>', methods=['GET'])
+def GetQuestion(question_id):
+	try:
+
+	return "test", 200
 
 
 if __name__ == "__main__":

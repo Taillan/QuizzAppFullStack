@@ -51,4 +51,9 @@ def decode_token(auth_token):
         raise JwtError('Invalid token. Please log in again.')
 
 def verify_token(token):
-    return decode_token(token) == "quiz-app-admin"
+    try:
+        decoded = decode_token(token.split(" ")[1])
+    except ValueError:
+        decoded = ""
+        print(ValueError)
+    return decoded == "quiz-app-admin"
