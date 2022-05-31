@@ -56,14 +56,17 @@ def GetQuestion(question_id):
 		result = GetQuestionService(question_id)
 		return result.toJSON(), 200
 	except ValueError:
-		return ValueError , 404
+		return "Question not found" , 404
 	return "test", 200
 
 @app.route('/questions/<int:question_id>', methods=['PUT'])
 def UpdateQuestion(question_id):
 	payload = request.get_json()
 	if verify_token(request.headers.get('Authorization')):
-		UpdateQuestionService(payload)
+		try:
+			UpdateQuestionService(question_id, payload)
+		except:
+			return "Question not found", 404
 		return "Updated", 200
 	else:
 		return "Wrong token", 401
