@@ -16,18 +16,20 @@ export default {
       registeredScores: [],
     };
   },
-  async created() {
-    console.log("Composant Home page 'created'");
-    var quizInfoApiResult = {
-      data: {
-        scores: [
-          { date: "01-01-2021", score: 20, playerName: "Mathieu" },
-          { date: "01-02-2021", score: 25, playerName: "Vincent" },
-        ],
-      },
-    }; //await quizApiService.getQuizInfo();
-    this.registeredScores = quizInfoApiResult.data.scores;
-    console.debug("Score :", this.registeredScores);
+  methods: {
+    async created() {
+      console.log("Composant Home page 'created'");
+      var quizInfoApiResult = {
+        data: {
+          scores: [
+            { date: "01-01-2021", score: 20, playerName: "Mathieu" },
+            { date: "01-02-2021", score: 25, playerName: "Vincent" },
+          ],
+        },
+      }; //await quizApiService.getQuizInfo();
+      this.registeredScores = quizInfoApiResult.data.scores;
+      console.debug("Score :", this.registeredScores);
+    },
   },
 };
 </script>
