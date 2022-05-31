@@ -1,26 +1,47 @@
 from models.Question import Question
-from dao.QuestionDAO import saveQuestion, getQuestion, updateQuestion, deleteQuestion
+from dao.QuestionDAO import getAllQuestion, saveQuestion, getQuestion, updateQuestion, deleteQuestion
 from dao.PossibleAnswersDAO import deletePossibleAnswers, savePossibleAnswers, getPossibleAnswers
 from services.PossibleAnswersServices import PossibleAnswersFromJson, PossibleAnswersFromSQL
+from errors import NotFound
+from db_connect import cur
 
 def NewQuestionService(payload):
     question = QuestionFromJson(payload)
     possibleAnswers = PossibleAnswersFromJson(payload)
-    saveQuestion(question)
-    savePossibleAnswers(possibleAnswers, payload['position'])
+    id = saveQuestion(question)
+    savePossibleAnswers(possibleAnswers, id)
+    return id
 
 def GetQuestionService(id):
-    question = QuestionFromSQL(getQuestion(id))
+    sql_result = getQuestion(id)
+    if sql_result == None:
+        raise NotFound
+    question = QuestionFromSQL(sql_result)
     answers = PossibleAnswersFromSQL(getPossibleAnswers(id))
     question.possibleAnswers = answers
     return question
 
+def GetAllQuestionService():
+    questions = AllQuestionFromSQL(getAllQuestion())
+    for question in questions:
+        answers = PossibleAnswersFromSQL(getPossibleAnswers(question.id))
+        question.possibleAnswers = answers
+    return questions
+
 def UpdateQuestionService(question_id, payload):
     question = QuestionFromJson(payload)
     updateQuestion(question, question_id)
+    if cur.rowcount == 0:
+        raise NotFound
+    deletePossibleAnswers(question_id)
+    answers = PossibleAnswersFromJson(payload)
+    savePossibleAnswers(answers, question_id)
+    return question_id
 
 def DeleteQuestionService(question_id):
     deleteQuestion(question_id)
+    if cur.rowcount == 0:
+        raise NotFound
     deletePossibleAnswers(question_id)
     
 def QuestionFromJson(payload):    
@@ -39,24 +60,34 @@ def QuestionFromJson(payload):
     try:
         image = payload['image']
     except:
-        image = "falseb64imagecontent"
+        image = ""
     return Question(title, text, position, image)
 
 def QuestionFromSQL(payload):
     try:
-        title = payload[0]
+        id = payload[0]
+    except:
+        return "Missing id"
+    try:
+        title = payload[1]
     except:
         return "Missing title"
     try:
-        text = payload[1]
+        text = payload[2]
     except:
         return "Missing text"
     try:
-        position = payload[2]
+        position = payload[3]
     except:
         return "Missing title"
     try:
-        image = payload[3]
+        image = payload[4]
     except:
         image = "falseb64imagecontent"
-    return Question(title, text, position, image)
+    return Question(title, text, position, image, id)
+
+def AllQuestionFromSQL(payload):
+    questions = []
+    for question in payload:
+        questions.append(QuestionFromSQL(question))
+    return questions

@@ -23,12 +23,16 @@ def PossibleAnswersFromSQL(payload):
     answers = []
     for element in payload:
         try:
-            text = element[0]
+            id = element[0]
+        except:
+            return "Missing id field"
+        try:
+            text = element[1]
         except:
             return "Missing text field"
         try:
-            isCorrect = element[1] == "True"
+            isCorrect = element[2] == "True"
         except:
             return "Missing isCorrect field"
-        answers.append(PossibleAnswers(text, isCorrect))
+        answers.append(PossibleAnswers(text, isCorrect, id))
     return answers

@@ -1,7 +1,8 @@
 import json
 
 class PossibleAnswers():
-    def __init__(self, text: str, isCorrect: bool):
+    def __init__(self, text: str, isCorrect: bool, id: int=None):
+        self.id = id
         self.text = text
         self.isCorrect = isCorrect
     

@@ -2,7 +2,8 @@ import json
 import sqlite3
 from flask import Flask, request
 from jwt_utils import build_token, verify_token
-from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService,UpdateQuestionService
+from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService,UpdateQuestionService, GetAllQuestionService
+from errors import NotFound
 
 app = Flask(__name__)
 
@@ -42,11 +43,19 @@ def NewQuestion():
 	else:
 		return "Wrong token", 401
 
+@app.route('/questions', methods=['GET'])
+def GetAllQuestion():
+	return json.dumps([ q.toJSON() for q in GetAllQuestionService()]), 200
+
+
 @app.route('/questions/<int:question_id>', methods=['DELETE'])
 def DelQuestion(question_id):
 	if verify_token(request.headers.get('Authorization')):
-		DeleteQuestionService(question_id)
-		return "Deleted", 201
+		try:
+			DeleteQuestionService(question_id)
+		except NotFound:
+			return "Question not found" , 404
+		return "Deleted", 204
 	else:
 		return "Wrong token", 401
 
@@ -55,9 +64,10 @@ def GetQuestion(question_id):
 	try:
 		result = GetQuestionService(question_id)
 		return result.toJSON(), 200
-	except ValueError:
+	except NotFound :
 		return "Question not found" , 404
-	return "test", 200
+	except ValueError:
+		return "Internal error : " + ValueError, 500
 
 @app.route('/questions/<int:question_id>', methods=['PUT'])
 def UpdateQuestion(question_id):
@@ -65,8 +75,10 @@ def UpdateQuestion(question_id):
 	if verify_token(request.headers.get('Authorization')):
 		try:
 			UpdateQuestionService(question_id, payload)
-		except:
+		except NotFound:
 			return "Question not found", 404
+		except ValueError:
+			return "Internal error : " + ValueError, 500
 		return "Updated", 200
 	else:
 		return "Wrong token", 401

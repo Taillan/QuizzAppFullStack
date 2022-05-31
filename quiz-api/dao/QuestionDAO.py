@@ -1,8 +1,10 @@
-from db_connect import db_connection
+from sqlite3 import SQLITE_READ
+from db_connect import db_connection, cur
 
 def saveQuestion(question):
-    instruction = f'insert into Question(title,text,position,image) values ("{question.title}","{question.text}","{question.position}","{question.image}")'
-    return db_connection(instruction)
+    instruction = f'insert into Question (title,text,position,image) values ("{question.title}","{question.text}","{question.position}","{question.image}")'
+    db_connection(instruction)
+    return cur.lastrowid
 
 # TODO Manque les possible answer #
 def updateQuestion(question, question_id):
@@ -11,8 +13,12 @@ def updateQuestion(question, question_id):
     return db_connection(instruction)
     
 def getQuestion(id):    
-    instruction = f'select title,text,position,image from Question where id={id}'
-    return db_connection(instruction, False)
+    instruction = f'select * from Question where id={id}'
+    return db_connection(instruction).fetchone()
+
+def getAllQuestion():
+    instruction = f'select * from Question'
+    return db_connection(instruction).fetchall()
 
 def deleteQuestion(id):
     instruction = f'delete from Question where id={id}'
