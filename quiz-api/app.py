@@ -52,7 +52,10 @@ def DelQuestion(question_id):
 @app.route('/questions/<int:question_id>', methods=['GET'])
 def GetQuestion(question_id):
 	try:
-
+		result = GetQuestionService(question_id)
+		return result.toJSON(), 200
+	except ValueError:
+		return ValueError , 404
 	return "test", 200
 
 
