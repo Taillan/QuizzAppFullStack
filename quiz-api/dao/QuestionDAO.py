@@ -6,9 +6,21 @@ def saveQuestion(question):
     return cur.lastrowid
 
 # TODO Manque les possible answer #
-def updateQuestion(question, question_id):
+def updateQuestion(question, id):
     instruction =   f'update Question set title="{question.title}", text="{question.text}", \
-                image="{question.image}", position={question.position} where id={question_id}'
+                image="{question.image}", position={question.position} where id={id}'
+    return db_connection(instruction)
+
+def updatePositionQuestion(newpos, oldpos):
+    instruction = f'update Question set position={newpos} where position={oldpos}'
+    return db_connection(instruction)
+
+def offsetPositionRangeQuestion(minrange, maxrange, offset):
+    instruction = f'update Question set position=position+{offset} where position between {minrange} and {maxrange}'
+    return db_connection(instruction)
+
+def offsetPositionQuestion(position, offset):
+    instruction = f'update Question set position=position+{offset} where position>={position}'
     return db_connection(instruction)
     
 def getQuestion(position):    
@@ -19,6 +31,10 @@ def getAllQuestion():
     instruction = f'select * from Question'
     return db_connection(instruction).fetchall()
 
-def deleteQuestion(id):
-    instruction = f'delete from Question where id={id}'
+def deleteQuestion(position):
+    instruction = f'delete from Question where position={position}'
     return db_connection(instruction)
+
+def getNumberQuestions():
+    instruction = f'select count(*) as count from Question;'
+    return db_connection(instruction).fetchone()

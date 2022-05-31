@@ -1,8 +1,10 @@
 import json
 from multiprocessing.sharedctypes import Value
 from flask import Flask, request
+from werkzeug.exceptions import BadRequestKeyError
 from jwt_utils import build_token, verify_token
-from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService,UpdateQuestionService, GetAllQuestionService
+from services.ParticipationServices import *
+from services.QuestionServices import *
 from errors import *
 from flask_cors import CORS
 
@@ -11,7 +13,7 @@ CORS(app)
 
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
-	return {"size": 0, "scores": []}, 200
+	return {"size": GetNumberQuestions(), "scores": [ p.toJSON() for p in GetAllParticipationService() ]}, 200
 
 @app.route('/login', methods=['POST'])
 def Login():
@@ -30,14 +32,20 @@ def Login():
 
 @app.route('/questions', methods=['POST'])
 def NewQuestion():
-	if not verify_token(request.headers.get('Authorization')):
+	try:
+		verify_token(request.headers.get('Authorization'))
+	except BadToken:
 		return BAD_TOKEN_MESSAGE, 401
+	except WrongToken:
+		return WRONG_TOKEN_MESSAGE, 401
 
 	payload = request.get_json()
 
 	try:
 		NewQuestionService(payload)
 		return QUESTION_CREATED_MESSAGE, 200
+	except AlreadyExisting:
+		return POSITION_ERROR_MESSAGE, 400
 	except ValueError:
 		return INTERNAL_ERROR_MESSAGE + ValueError, 500
 
@@ -53,8 +61,12 @@ def GetAllQuestion():
 
 @app.route('/questions/<int:question_position>', methods=['DELETE'])
 def DelQuestion(question_position):
-	if not verify_token(request.headers.get('Authorization')):
+	try:
+		verify_token(request.headers.get('Authorization'))
+	except BadToken:
 		return BAD_TOKEN_MESSAGE, 401
+	except WrongToken:
+		return WRONG_TOKEN_MESSAGE, 401
 
 	try:
 		DeleteQuestionService(question_position)
@@ -66,30 +78,62 @@ def DelQuestion(question_position):
 	
 
 
-@app.route('/questions/<int:question_id>', methods=['GET'])
-def GetQuestion(question_id):
+@app.route('/questions/<int:position>', methods=['GET'])
+def GetQuestion(position):
 	try:
-		result = GetQuestionService(question_id)
+		result = GetQuestionService(position)
 		return result.toJSON(), 200
 	except NotFound :
 		return NOT_FOUND_MESSAGE , 404
 	except ValueError:
 		return INTERNAL_ERROR_MESSAGE + ValueError, 500
 
-@app.route('/questions/<int:question_id>', methods=['PUT'])
-def UpdateQuestion(question_id):
-	if not verify_token(request.headers.get('Authorization')):
+@app.route('/questions/<int:position>', methods=['PUT'])
+def UpdateQuestion(position):
+	try:
+		verify_token(request.headers.get('Authorization'))
+	except BadToken:
 		return BAD_TOKEN_MESSAGE, 401
+	except WrongToken:
+		return WRONG_TOKEN_MESSAGE, 401
 
 	payload = request.get_json()
 
 	try:
-		UpdateQuestionService(question_id, payload)
+		UpdateQuestionService(position, payload)
 	except NotFound:
 		return NOT_FOUND_MESSAGE, 404
 	except ValueError:
 		return INTERNAL_ERROR_MESSAGE + ValueError, 500
 	return QUESTION_UPDATED_MESSAGE, 200
+
+@app.route('/participations', methods=['POST'])
+def NewParticipations():
+
+	payload = request.get_json()
+
+	try:
+		participation = NewParticipationService(payload)
+		return participation.toJSON(), 200
+	except BadParticipation:
+		return BAD_PARTICIPATION_MESSAGE, 400
+	except ValueError:
+		return INTERNAL_ERROR_MESSAGE + ValueError, 500
+
+@app.route('/participations', methods=['DELETE'])
+def DelAllParticipation():
+	try:
+		verify_token(request.headers.get('Authorization'))
+	except BadToken:
+		return BAD_TOKEN_MESSAGE, 401
+	except WrongToken:
+		return WRONG_TOKEN_MESSAGE, 401
+
+	try:
+		DeleteAllParticipations()
+		return ALLPARTICIPANT_DELETED_MESSAGE, 204
+	except ValueError:
+		return INTERNAL_ERROR_MESSAGE + ValueError, 500 
 
 if __name__ == "__main__":
 	app.run()

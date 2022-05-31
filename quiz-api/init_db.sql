@@ -14,3 +14,10 @@ CREATE TABLE IF NOT EXISTS "Question" (
         "position"  INTEGER NOT NULL,
         "image" TEXT
 );
+
+CREATE TABLE IF NOT EXISTS "Participation" (
+        "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+        "playerName" TEXT NOT NULL,
+        "answers"  TEXT NOT NULL,
+        "score" INT NOT NULL
+);

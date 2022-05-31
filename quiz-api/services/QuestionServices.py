@@ -3,9 +3,17 @@ from dao.QuestionDAO import *
 from services.PossibleAnswersServices import *
 from errors import NotFound
 from db_connect import cur
+from errors import AlreadyExisting
 
 def NewQuestionService(payload):
     question = QuestionFromJson(payload)
+    
+    try:
+        original = GetQuestionService(question.position)
+        offsetPositionQuestion(question.position, 1)
+    except NotFound:
+        pass
+
     question_id = saveQuestion(question)
     NewPossibleAnswersService(payload, question_id)
     return id
@@ -28,27 +36,38 @@ def GetAllQuestionService():
         question.possibleAnswers = answers
     return questions
 
-def UpdateQuestionService(question_id, payload):
+def UpdateQuestionService(position, payload):
     question = QuestionFromJson(payload)
 
-    original = GetQuestionService(question_id)
+    original = GetQuestionService(position)
 
     if question.position != original.position:
-        print("olalala je dois changer les pos")
+        UpdateQuestionPositionsService(question.position, original.position)
 
-    updateQuestion(question, question_id)
+    updateQuestion(question, original.id)
 
-    UpdatePossibleAnswerService(question_id, payload)
+    UpdatePossibleAnswerService(original.id, payload)
 
-    return question_id
+    return position
 
-def DeleteQuestionService(question_id):
-    deleteQuestion(question_id)
+def UpdateQuestionPositionsService(newpos, oldpos):
+    if newpos > oldpos:
+        offsetPositionRangeQuestion(oldpos,newpos,-1)
+    else:
+        offsetPositionRangeQuestion(newpos,oldpos,1)
 
-    if cur.rowcount == 0:
+
+def DeleteQuestionService(position):
+    question = GetQuestionService(position)
+    if question == None:
         raise NotFound
-        
-    DeletePossibleAnswerService(question_id)
+
+    deleteQuestion(position)
+    DeletePossibleAnswerService(question.id)
+    offsetPositionQuestion(position,-1)
+
+def GetNumberQuestions():
+    return getNumberQuestions()[0]
     
 def QuestionFromJson(payload):    
     try:

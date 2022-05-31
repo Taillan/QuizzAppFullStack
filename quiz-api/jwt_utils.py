@@ -3,6 +3,8 @@ import jwt
 import datetime
 from werkzeug.exceptions import Unauthorized
 
+from errors import BadToken, WrongToken
+
 
 class JwtError(Exception):
     """Exception raised for jwt errors in the quiz app 
@@ -53,13 +55,8 @@ def decode_token(auth_token):
 
 def verify_token(token):
     try:
-        if token is type(None):
-            raise AttributeError
         decoded = decode_token(token.split(" ")[1])
-    except ValueError:
-        decoded = ""
-        print(ValueError)
-    except AttributeError:
-        decoded = ""
-        print(AttributeError)
-    return decoded == "quiz-app-admin"
+    except:
+        raise BadToken
+    if decoded != "quiz-app-admin":
+        raise WrongToken
