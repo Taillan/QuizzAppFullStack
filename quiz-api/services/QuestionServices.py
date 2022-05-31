@@ -1,5 +1,5 @@
 from models.Question import Question, PossibleAnswers
-from dao.QuestionDAO import savePossibleAnswers, saveQuestion, getQuestion, getPossibleAnswers
+from dao.QuestionDAO import savePossibleAnswers, saveQuestion, getQuestion, getPossibleAnswers, updateQuestion
 
 def NewQuestionService(payload):
     question = QuestionFromJson(payload)
@@ -32,6 +32,13 @@ def QuestionFromSQL(payload):
         image = "falseb64imagecontent"
     return Question(title, text, position, image)
 
+def UpdateQuestionService(payload):
+    question = QuestionFromJson(payload)
+    updateQuestion(question)
+
+def DeleteQuestionService(question_id):
+    deleteQuestion(question_id)
+    
 def QuestionFromJson(payload):    
     try:
         title = payload['title']

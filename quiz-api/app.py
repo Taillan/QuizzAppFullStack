@@ -2,7 +2,7 @@ import json
 import sqlite3
 from flask import Flask, request
 from jwt_utils import build_token, verify_token
-from services.QuestionServices import NewQuestionService, GetQuestionService
+from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService,UpdateQuestionService
 
 app = Flask(__name__)
 
@@ -45,7 +45,8 @@ def NewQuestion():
 @app.route('/questions/<int:question_id>', methods=['DELETE'])
 def DelQuestion(question_id):
 	if verify_token(request.headers.get('Authorization')):
-		return "Created", 201
+		DeleteQuestionService(question_id)
+		return "Deleted", 201
 	else:
 		return "Wrong token", 401
 
@@ -57,6 +58,15 @@ def GetQuestion(question_id):
 	except ValueError:
 		return ValueError , 404
 	return "test", 200
+
+@app.route('/questions/<int:question_id>', methods=['PUT'])
+def UpdateQuestion(question_id):
+	payload = request.get_json()
+	if verify_token(request.headers.get('Authorization')):
+		UpdateQuestionService(payload)
+		return "Updated", 200
+	else:
+		return "Wrong token", 401
 
 
 if __name__ == "__main__":
