@@ -12,8 +12,9 @@ import quizApiService from "@/services/QuizApiService";
 export default {
   name: "HomePage",
   data() {
-    var registeredScores = [];
-    return {};
+    return {
+      registeredScores: [],
+    };
   },
   async created() {
     console.log("Composant Home page 'created'");
@@ -30,5 +31,6 @@ export default {
   },
 };
 </script>
+
 <style>
 </style> 
