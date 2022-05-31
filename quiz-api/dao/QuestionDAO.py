@@ -17,3 +17,10 @@ def getQuestion(int:id):
         f'select * from Question where id={id}'
     )
     db.close()
+
+def deleteQuestion(int:id):
+    db = get_db_connection()
+    delete_result = db.execute(
+        f'delet from Question where id={id}'
+    )
+    db.close()

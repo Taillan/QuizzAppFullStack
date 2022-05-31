@@ -2,7 +2,7 @@ import json
 import sqlite3
 from flask import Flask, request
 from jwt_utils import build_token, verify_token
-from services.QuestionServices import NewQuestionService, GetQuestionService
+from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService
 
 app = Flask(__name__)
 
