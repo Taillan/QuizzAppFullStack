@@ -4,8 +4,10 @@ from flask import Flask, request
 from jwt_utils import build_token, verify_token
 from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService,UpdateQuestionService, GetAllQuestionService
 from errors import NotFound
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def get_db_connection():
 	conn = sqlite3.connect('database.db')
@@ -85,4 +87,4 @@ def UpdateQuestion(question_id):
 
 
 if __name__ == "__main__":
-	app.run(ssl_context='adhoc')
+	app.run()
