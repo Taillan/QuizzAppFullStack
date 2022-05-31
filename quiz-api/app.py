@@ -45,15 +45,25 @@ def NewQuestion():
 @app.route('/questions/<int:question_id>', methods=['DELETE'])
 def DelQuestion(question_id):
 	if verify_token(request.headers.get('Authorization')):
-		return "Created", 201
+		DeleteQuestionService(question_id)
+		return "Deleted", 201
 	else:
 		return "Wrong token", 401
 
 @app.route('/questions/<int:question_id>', methods=['GET'])
 def GetQuestion(question_id):
-	try:
+	#try:
 
 	return "test", 200
+
+@app.route('/questions/<int:question_id>', methods=['PUT'])
+def UpdateQuestion(question_id):
+	payload = request.get_json()
+	if verify_token(request.headers.get('Authorization')):
+		UpdateQuestionService(payload)
+		return "Updated", 201
+	else:
+		return "Wrong token", 401
 
 
 if __name__ == "__main__":

@@ -5,9 +5,8 @@ def NewQuestionService(payload):
     question = QuestionFromJson(payload)
     saveQuestion(question)
 
-def DeleteQuestionService(payload):
-    question = QuestionFromJson(payload)
-    deleteQuestion(question.id)
+def DeleteQuestionService(question_id):
+    deleteQuestion(question_id)
 
 def GetQuestionService(int:id):
     return 
