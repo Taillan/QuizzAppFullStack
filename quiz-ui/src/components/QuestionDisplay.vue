@@ -2,17 +2,24 @@
   <p>{{ question.title }}</p>
   <p>{{ question.text }}</p>
   <img v-if="question.image" :src="question.image" />
-  <a @click="$emit('answer-selected', 0)">La réponse A</a>
-  <a @click="$emit('answer-selected', 1)">La réponse B</a>
-  <a @click="$emit('answer-selected', 2)">La réponse C</a>
-  <a @click="$emit('answer-selected', 3)">La réponse D</a>
+  <div
+    v-for="answerEntry in this.question.possibleAnswers"
+    v-bind:key="answerEntry.text"
+  >
+    <button class="btn btn-primary" @click="$emit('answer-selected', answerEntry.isCorrect)" value="">
+      {{ answerEntry.text }}
+    </button>
+  </div>
 </template>
 
 <script>
 export default {
   name: "QuestionDisplay",
   emits: ["answer-selected"],
-  data() {},
+
+  async created() {
+    console.log("Composant QuestionsDisplay 'created'");
+  },
   methods: {},
   props: {
     question: {
