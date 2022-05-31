@@ -33,9 +33,16 @@ export default {
   getQuestion(position) {
     // not implemented
   },
+
   getQuizInfo() {
     console.debug("GetRegistredScore");
     var quizInfo = this.call("GET", "quiz-info");
     return quizInfo;
   },
+
+  getQuestionByPosition: function (position) {
+    console.debug("getQuestionByPosition position:" + position);
+    var question = this.call("GET", "questions/" + position);
+    return question;
+  }
 };
