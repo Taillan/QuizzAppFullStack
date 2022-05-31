@@ -2,7 +2,7 @@ import json
 import sqlite3
 from flask import Flask, request
 from jwt_utils import build_token, verify_token
-from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService
+from services.QuestionServices import NewQuestionService, GetQuestionService,DeleteQuestionService,UpdateQuestionService
 
 app = Flask(__name__)
 
@@ -61,7 +61,7 @@ def UpdateQuestion(question_id):
 	payload = request.get_json()
 	if verify_token(request.headers.get('Authorization')):
 		UpdateQuestionService(payload)
-		return "Updated", 201
+		return "Updated", 200
 	else:
 		return "Wrong token", 401
 

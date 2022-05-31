@@ -1,9 +1,13 @@
 from models.Question import Question
-from dao.QuestionDAO import saveQuestion,deleteQuestion
+from dao.QuestionDAO import saveQuestion,deleteQuestion,updateQuestion
 
 def NewQuestionService(payload):
     question = QuestionFromJson(payload)
     saveQuestion(question)
+
+def UpdateQuestionService(payload):
+    question = QuestionFromJson(payload)
+    updateQuestion(question)
 
 def DeleteQuestionService(question_id):
     deleteQuestion(question_id)
