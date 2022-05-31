@@ -11,8 +11,8 @@ def updateQuestion(question, question_id):
                 image="{question.image}", position={question.position} where id={question_id}'
     return db_connection(instruction)
     
-def getQuestion(id):    
-    instruction = f'select * from Question where id={id}'
+def getQuestion(position):    
+    instruction = f'select * from Question where position={position}'
     return db_connection(instruction).fetchone()
 
 def getAllQuestion():

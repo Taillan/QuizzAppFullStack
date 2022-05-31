@@ -10,14 +10,14 @@ def NewQuestionService(payload):
     NewPossibleAnswersService(payload, question_id)
     return id
 
-def GetQuestionService(id):
-    sql_result = getQuestion(id)
+def GetQuestionService(position):
+    sql_result = getQuestion(position)
 
     if sql_result == None:
         raise NotFound
 
     question = QuestionFromSQL(sql_result)
-    answers = GetPossibleAnswersService(id)
+    answers = GetPossibleAnswersService(question.id)
     question.possibleAnswers = answers
     return question
 
@@ -30,10 +30,13 @@ def GetAllQuestionService():
 
 def UpdateQuestionService(question_id, payload):
     question = QuestionFromJson(payload)
-    updateQuestion(question, question_id)
 
-    if cur.rowcount == 0:
-        raise NotFound
+    original = GetQuestionService(question_id)
+
+    if question.position != original.position:
+        print("olalala je dois changer les pos")
+
+    updateQuestion(question, question_id)
 
     UpdatePossibleAnswerService(question_id, payload)
 

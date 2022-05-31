@@ -51,13 +51,13 @@ def GetAllQuestion():
 		return INTERNAL_ERROR_MESSAGE + ValueError, 500 
 	
 
-@app.route('/questions/<int:question_id>', methods=['DELETE'])
-def DelQuestion(question_id):
+@app.route('/questions/<int:question_position>', methods=['DELETE'])
+def DelQuestion(question_position):
 	if not verify_token(request.headers.get('Authorization')):
 		return BAD_TOKEN_MESSAGE, 401
 
 	try:
-		DeleteQuestionService(question_id)
+		DeleteQuestionService(question_position)
 		return QUESTION_DELETED_MESSAGE, 204
 	except NotFound:
 		return NOT_FOUND_MESSAGE , 404
