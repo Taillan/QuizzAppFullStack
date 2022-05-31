@@ -1,4 +1,3 @@
-from sqlite3 import SQLITE_READ
 from db_connect import db_connection, cur
 
 def saveQuestion(question):

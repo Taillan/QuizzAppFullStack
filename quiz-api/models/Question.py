@@ -1,5 +1,4 @@
 import json
-from models.PossibleAnswers import PossibleAnswers
 
 class Question():
     def __init__(self, title: str, text: str, position: int, image: str,  question_id: int=None):

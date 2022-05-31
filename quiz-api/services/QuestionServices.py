@@ -1,48 +1,51 @@
 from models.Question import Question
-from dao.QuestionDAO import getAllQuestion, saveQuestion, getQuestion, updateQuestion, deleteQuestion
-from dao.PossibleAnswersDAO import deletePossibleAnswers, savePossibleAnswers, getPossibleAnswers
-from services.PossibleAnswersServices import PossibleAnswersFromJson, PossibleAnswersFromSQL
+from dao.QuestionDAO import *
+from services.PossibleAnswersServices import *
 from errors import NotFound
 from db_connect import cur
 
 def NewQuestionService(payload):
     question = QuestionFromJson(payload)
-    possibleAnswers = PossibleAnswersFromJson(payload)
-    id = saveQuestion(question)
-    savePossibleAnswers(possibleAnswers, id)
+    question_id = saveQuestion(question)
+    NewPossibleAnswersService(payload, question_id)
     return id
 
 def GetQuestionService(id):
     sql_result = getQuestion(id)
+
     if sql_result == None:
         raise NotFound
+
     question = QuestionFromSQL(sql_result)
-    answers = PossibleAnswersFromSQL(getPossibleAnswers(id))
+    answers = GetPossibleAnswersService(id)
     question.possibleAnswers = answers
     return question
 
 def GetAllQuestionService():
     questions = AllQuestionFromSQL(getAllQuestion())
     for question in questions:
-        answers = PossibleAnswersFromSQL(getPossibleAnswers(question.id))
+        answers = GetPossibleAnswersService(question.id)
         question.possibleAnswers = answers
     return questions
 
 def UpdateQuestionService(question_id, payload):
     question = QuestionFromJson(payload)
     updateQuestion(question, question_id)
+
     if cur.rowcount == 0:
         raise NotFound
-    deletePossibleAnswers(question_id)
-    answers = PossibleAnswersFromJson(payload)
-    savePossibleAnswers(answers, question_id)
+
+    UpdatePossibleAnswerService(question_id, payload)
+
     return question_id
 
 def DeleteQuestionService(question_id):
     deleteQuestion(question_id)
+
     if cur.rowcount == 0:
         raise NotFound
-    deletePossibleAnswers(question_id)
+        
+    DeletePossibleAnswerService(question_id)
     
 def QuestionFromJson(payload):    
     try:

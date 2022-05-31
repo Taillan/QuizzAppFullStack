@@ -1,5 +1,24 @@
 
 from models.PossibleAnswers import PossibleAnswers
+from dao.PossibleAnswersDAO import *
+
+def NewPossibleAnswersService(payload, question_id):
+    possibleAnswers = PossibleAnswersFromJson(payload)
+    savePossibleAnswers(possibleAnswers, question_id)
+
+def GetPossibleAnswersService(id):
+    return PossibleAnswersFromSQL(getPossibleAnswers(id))
+
+def DeletePossibleAnswerService(id):
+    deletePossibleAnswers(id)
+
+def SavePossibleAnswerService(payload, question_id):
+    savePossibleAnswers(payload, question_id)
+
+def UpdatePossibleAnswerService(question_id, payload):
+    DeletePossibleAnswerService(question_id)
+    answers = PossibleAnswersFromJson(payload)
+    SavePossibleAnswerService(answers, question_id)
 
 def PossibleAnswersFromJson(payload):
     answers = []
