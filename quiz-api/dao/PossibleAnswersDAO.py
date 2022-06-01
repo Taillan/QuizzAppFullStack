@@ -1,4 +1,4 @@
-from db_connect import db_connection
+from utils.db_connect import db_connection
 
 def savePossibleAnswers(answers, question_id):
     instruction = f'insert into PossibleAnswers(question_id,text,isCorrect) values'

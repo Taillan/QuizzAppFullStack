@@ -1,9 +1,10 @@
-from db_connect import db_connection, cur
+from utils.db_connect import db_connection, get_cur
 
 def saveQuestion(question):
     instruction = f'insert into Question (title,text,position,image) values ("{question.title}","{question.text}","{question.position}","{question.image}")'
     db_connection(instruction)
-    return cur.lastrowid
+    print(get_cur().lastrowid)
+    return get_cur().lastrowid
 
 # TODO Manque les possible answer #
 def updateQuestion(question, id):

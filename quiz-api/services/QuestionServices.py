@@ -1,9 +1,7 @@
 from models.Question import Question
 from dao.QuestionDAO import *
 from services.PossibleAnswersServices import *
-from errors import NotFound
-from db_connect import cur
-from errors import AlreadyExisting
+from utils.errors import NotFound
 
 def NewQuestionService(payload):
     question = QuestionFromJson(payload)

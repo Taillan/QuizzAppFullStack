@@ -1,8 +1,8 @@
 from models.Participation import Participation
 from dao.ParticipationDAO import *
 from services.QuestionServices import GetNumberQuestions, GetQuestionService
-from errors import BadParticipation, NotFound
-from db_connect import cur
+from utils.errors import BadParticipation, NotFound
+from utils.db_connect import get_cur
 
 def NewParticipationService(payload):
     participation = ParticipationFromJson(payload)
@@ -37,7 +37,7 @@ def UpdateParticipationService(id, payload):
 def DeleteParticipationService(id):
     deleteParticipation(id)
 
-    if cur.rowcount == 0:
+    if get_cur.rowcount == 0:
         raise NotFound
 
 def DeleteAllParticipations():

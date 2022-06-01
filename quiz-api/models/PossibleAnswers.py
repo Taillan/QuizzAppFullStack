@@ -1,5 +1,3 @@
-import json
-
 class PossibleAnswers():
     def __init__(self, text: str, isCorrect: bool, id: int=None):
         self.id = id
@@ -7,4 +5,4 @@ class PossibleAnswers():
         self.isCorrect = isCorrect
     
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, indent=4, ensure_ascii=False)
+        return {"text": self.text, "isCorrect": self.isCorrect}

@@ -1,9 +1,6 @@
-import types
 import jwt
 import datetime
-from werkzeug.exceptions import Unauthorized
-
-from errors import BadToken, WrongToken
+from utils.errors import BadToken, WrongToken
 
 
 class JwtError(Exception):

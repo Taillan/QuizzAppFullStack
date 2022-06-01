@@ -1,9 +1,10 @@
-from db_connect import db_connection, cur
+
+from utils.db_connect import db_connection,get_cur
 
 def saveParticipation(participation):
     instruction = f'insert into Participation (playerName,answers,score) values ("{participation.playerName}","{participation.answers}","{participation.score}")'
     db_connection(instruction)
-    return cur.lastrowid
+    return get_cur().lastrowid
 
 # TODO Manque les possible answer #
 def updateParticipation(participation, id):

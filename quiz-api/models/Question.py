@@ -1,5 +1,3 @@
-import json
-
 class Question():
     def __init__(self, title: str, text: str, position: int, image: str,  question_id: int=None):
         self.id = question_id
@@ -10,4 +8,5 @@ class Question():
         self.possibleAnswers = []
     
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, indent=4, ensure_ascii=False)
+        answers = [ a.toJSON() for a in self.possibleAnswers ]
+        return {"title": self.title, "text": self.text, "position": self.position, "image": self.image, "possibleAnswers": answers}
