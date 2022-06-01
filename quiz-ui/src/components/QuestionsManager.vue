@@ -3,8 +3,8 @@
   Current score is : {{ currentScore }}
   <QDisplay
     :question="currentQuestion"
-    @click-on-answer="answerClickedHandler"
-  />-
+    @answer-selected="answerClickedHandler"
+  />
 </template>
 
 <script>
@@ -56,12 +56,14 @@ export default {
       this.$router.push("/");
     },
 
-    answerClickedHandler() {
+    answerClickedHandler(isCorrect) {
+      console.log("Button clicked");
       this.currentQuestionPosition = this.currentQuestionPosition + 1;
-      if ($event) {
-        currentScore++;
+      if (isCorrect) {
+        this.currentScore++;
       }
       if (this.currentQuestionPosition < this.totalNumberOfQuestion) {
+        console.log("Load new question");
         this.loadQuestionByPosition();
       } else {
         this.endQuiz();
