@@ -1,6 +1,5 @@
 <template>
   <h1>Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1>
-  Current score is : {{ currentScore }}
   <QDisplay
     :question="currentQuestion"
     @answer-selected="answerClickedHandler"
@@ -10,6 +9,7 @@
 <script>
 import quizApiService from "@/services/QuizApiService";
 import QuestionDisplay from "@/components/QuestionDisplay.vue";
+import participationStorageService from "@/services/ParticipationStorageService";
 
 export default {
   name: "QuestionsManager",
@@ -17,16 +17,12 @@ export default {
     QDisplay: QuestionDisplay,
   },
 
-  props: {
-    emits: ["answer-selected"],
-  },
-
   data() {
     return {
       currentQuestionPosition: 1,
-      totalNumberOfQuestion: 5,
+      totalNumberOfQuestion: 50000,
       currentQuestion: {},
-      currentScore: 0,
+      currentAnswer: [],
     };
   },
 
@@ -36,34 +32,36 @@ export default {
 
   async beforeCreate() {
     let tempQuestion = await quizApiService.getQuestionByPosition(1);
+    let tempQuizzInfo = await quizApiService.getQuizInfo();
 
+    console.log("number of question :", tempQuizzInfo.data.size);
+    this.totalNumberOfQuestion = tempQuizzInfo.data.size;
     this.currentQuestion = tempQuestion.data;
   },
 
   methods: {
     async loadQuestionByPosition() {
-      console.log("load Question in Position " + this.currentQuestionPosition);
       let tempQuestion = await quizApiService.getQuestionByPosition(
         this.currentQuestionPosition
       );
 
       this.currentQuestion = tempQuestion.data;
-      console.log("new question content : ", this.currentQuestion);
     },
 
     async endQuiz() {
-      this.currentQuestionPosition = 1;
+      let payload = {
+        playerName: participationStorageService.getPlayerName(),
+        answers: this.currentAnswer,
+      };
+      console.log("payload : ", payload);
+      await quizApiService.postNewParticipation(payload);
       this.$router.push("/");
     },
 
-    answerClickedHandler(isCorrect) {
-      console.log("Button clicked");
-      this.currentQuestionPosition = this.currentQuestionPosition + 1;
-      if (isCorrect) {
-        this.currentScore++;
-      }
+    answerClickedHandler(Answer) {
+      this.currentAnswer.push(Answer);
       if (this.currentQuestionPosition < this.totalNumberOfQuestion) {
-        console.log("Load new question");
+        this.currentQuestionPosition = this.currentQuestionPosition + 1;
         this.loadQuestionByPosition();
       } else {
         this.endQuiz();

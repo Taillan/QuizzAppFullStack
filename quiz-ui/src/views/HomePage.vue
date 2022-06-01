@@ -18,15 +18,8 @@ export default {
   },
   async created() {
     console.log("Composant Home page 'created'");
-    var quizInfoApiResult = {
-      data: {
-        scores: [
-          { date: "01-01-2021", score: 20, playerName: "Mathieu" },
-          { date: "01-02-2021", score: 25, playerName: "Vincent" },
-        ],
-      },
-    }; //await quizApiService.getQuizInfo();
-    this.registeredScores = quizInfoApiResult.data.scores;
+    let tempQuizScores = await quizApiService.getQuizInfo();
+    this.registeredScores = tempQuizScores.data.scores;
     console.debug("Score :", this.registeredScores);
   },
 

@@ -35,7 +35,7 @@ export default {
   },
 
   getQuizInfo() {
-    console.debug("GetRegistredScore");
+    console.debug("getQuizInfo");
     var quizInfo = this.call("GET", "quiz-info");
     return quizInfo;
   },
@@ -44,5 +44,11 @@ export default {
     console.debug("getQuestionByPosition position:" + position);
     var question = this.call("GET", "questions/" + position);
     return question;
-  }
+  },
+
+  postNewParticipation: function (payload) {
+    console.debug("postNewParticipation");
+    this.call("POST", "participations", payload);
+    return;
+  },
 };
