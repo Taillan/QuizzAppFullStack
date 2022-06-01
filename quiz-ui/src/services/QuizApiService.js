@@ -30,10 +30,6 @@ export default {
   getQuizInfo() {
     return this.call("get", "quiz-info");
   },
-  getQuestion(position) {
-    // not implemented
-  },
-
   getQuizInfo() {
     console.debug("getQuizInfo");
     var quizInfo = this.call("GET", "quiz-info");
