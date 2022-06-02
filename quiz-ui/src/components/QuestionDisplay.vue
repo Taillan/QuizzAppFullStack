@@ -6,7 +6,7 @@
     v-for="(answerEntry, index) in this.question.possibleAnswers"
     v-bind:key="answerEntry.text"
   >
-    <button class="btn btn-primary" @click="$emit('answer-selected', index)">
+    <button class="btn btn-primary" @click="$emit('answer-selected', index,answerEntry.isCorrect)">
       {{ answerEntry.text }}
     </button>
   </div>

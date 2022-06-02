@@ -20,6 +20,7 @@ export default {
   data() {
     return {
       currentQuestionPosition: 1,
+      currentScore:0,
       totalNumberOfQuestion: 50000,
       currentQuestion: {},
       currentAnswer: [],
@@ -55,15 +56,17 @@ export default {
       };
       console.log("payload : ", payload);
       await quizApiService.postNewParticipation(payload);
-      this.$router.push("/");
+      this.$router.push("/votre-score");
     },
 
-    answerClickedHandler(Answer) {
+    answerClickedHandler(Answer,isCorrect) {
       this.currentAnswer.push(Answer);
+      if(isCorrect) this.currentScore+=1;
       if (this.currentQuestionPosition < this.totalNumberOfQuestion) {
-        this.currentQuestionPosition = this.currentQuestionPosition + 1;
+        this.currentQuestionPosition += 1;
         this.loadQuestionByPosition();
       } else {
+        participationStorageService.saveParticipationScore(this.currentScore)
         this.endQuiz();
       }
     },

@@ -28,9 +28,6 @@ export default {
       });
   },
   getQuizInfo() {
-    return this.call("get", "quiz-info");
-  },
-  getQuizInfo() {
     console.debug("getQuizInfo");
     var quizInfo = this.call("GET", "quiz-info");
     return quizInfo;

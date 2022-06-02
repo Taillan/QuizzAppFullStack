@@ -9,9 +9,10 @@ export default {
     return window.localStorage.getItem("playerName");
   },
   saveParticipationScore(participationScore) {
-    // TODO : implement
+    window.localStorage.setItem("participationScore", participationScore);
   },
+
   getParticipationScore() {
-    // todo : implement
+    return window.localStorage.getItem("participationScore");
   }
 };
