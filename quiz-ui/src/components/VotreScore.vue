@@ -1,7 +1,9 @@
 <template>
   GG {{currentPlayer}}, tu as fini avec un score de {{finalScore}}
   Tu es {{scoreClassement}} sur {{numberOfParticipant}}
-  <router-link to="/">Retour a l'acceuil</router-link>
+  <router-link to="/">Retour a l'acceuil</router-link><div v-for="scoreEntry in this.registeredScores" v-bind:key="scoreEntry.date">
+    {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
+  </div>
 </template>
 
 <script>
@@ -19,7 +21,8 @@ export default {
       numberOfParticipant:0,
       finalScore:0,
       scoreBoard:[],
-      scoreClassement:0
+      scoreClassement:0,
+      registeredScores: [],
     };
   },
 
@@ -35,7 +38,6 @@ export default {
       tempBoard.push(participant.score);
     })
 
-    tempBoard.push(this.finalScore);
 
     this.scoreBoard = tempBoard;
     this.numberOfParticipant = this.scoreBoard.length;
@@ -49,6 +51,10 @@ export default {
         return;
       } 
     })
+
+    
+    let tempQuizScores = await quizApiService.getQuizInfo();
+    this.registeredScores = tempQuizScores.data.scores.slice(0, 5);
 
   },
   unmounted(){

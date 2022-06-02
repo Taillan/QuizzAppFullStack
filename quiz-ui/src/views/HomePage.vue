@@ -20,7 +20,6 @@ export default {
     console.log("Composant Home page 'created'");
     let tempQuizScores = await quizApiService.getQuizInfo();
     this.registeredScores = tempQuizScores.data.scores;
-    console.debug("Score :", this.registeredScores);
   },
 
   methods: {},
