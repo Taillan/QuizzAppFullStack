@@ -1,27 +1,67 @@
 <template>
-  <div class="NewQuizzPage">
-    <p>Admin:</p>
-    <router-link to="/question-list">Liste des questions</router-link>
+  <div class="AdminPage">
+    <div class="LoginDiv" v-if="!this.token">
+      <input type="Password" placeholder="Password" v-model="password" />
+      <button class="btn btn-primary" @click="login ">Login</button>
+      <h1 v-if="wrongpassword" style="color:red">Wrong password</h1>
+    </div>
+
+    <div class="AdminModeDiv" v-if="this.token">
+      
+      <h1>AdminMode :</h1>
+      <select v-model="adminMode">
+        <option disabled value="">Choisissez le mode</option>
+        <option>QuestionsList</option>
+        <option>QuestionsEdition</option>
+        <option>QuestionAdminDisplay</option>
+      </select>
+      <QList v-if="this.adminMode=='QuestionsList'"/>
+      <QEdit v-if="this.adminMode=='QuestionsEdition'"/>
+      <QEdit v-if="this.adminMode=='QuestionAdminDisplay'"/>
+    </div>
   </div>
 </template>
 
 <script>
+import AdminStorageService from "@/services/AdminStorageService";
+import AdminApiService from "@/services/AdminApiService";
+import QuestionsEdition from "@/components/Admin/QuestionsEdition.vue";
+import QuestionAdminDisplay from "@/components/Admin/QuestionAdminDisplay.vue";
+import QuestionsList from "@/components/Admin/QuestionsList.vue";
 
 export default {
-  name: "NewQuizzPage",
+  name: "AdminPage",
+  components: {
+    QList: QuestionsList,
+    QEdit: QuestionsEdition,
+    QDisplay: QuestionAdminDisplay,
+  },
   data() {
     return {
+      wrongpassword:false,
+      password: "",
+      token:"",
+      adminMode:""
     };
   },
   methods: {
     async created() {
       console.log("Composant AdminPage page 'created'");
     },
+    async login(){
+      let response 
+      try{
+      response = await AdminApiService.postLogin(this.password);
+      this.token=response.data.token;
+      AdminStorageService.saveAdminToken(this.token);
+      }catch(error){
+        this.wrongpassword=true;
+      }
+
+    }
   },
 };
 </script>
 
 <style>
-@media (min-width: 1024px) {
-}
 </style>

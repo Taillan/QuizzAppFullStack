@@ -38,5 +38,24 @@ export default {
     console.debug("getAllQuestion");
     let response = this.call("GET", "questions");
     return response;
+  },
+
+  postAddQuestion(text, title, image, position, texteA, answerA, texteB, answerB, texteC, answerC, texteD, answerD,token) {
+    console.debug("postAddQuestion");
+    let payload = {
+      "text": text,
+      "title": title,
+      "image": image,
+      "position": position,
+      "possibleAnswers":
+        [
+          { "text": texteA, "isCorrect": answerA },
+          { "text": texteB, "isCorrect": answerB },
+          { "text": texteC, "isCorrect": answerC },
+          { "text": texteD, "isCorrect": answerD },
+        ]
+    }
+    this.call("POST", "questions", payload,token);
+    return;
   }
 }
