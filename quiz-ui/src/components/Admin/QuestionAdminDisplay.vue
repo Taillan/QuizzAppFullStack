@@ -6,6 +6,9 @@
     <QDisplay
     :question="currentQuestion"
     :admin="true"></QDisplay>
+    <button class="btn btn-primary" @click="$emit('goEdit')">
+      Edit
+    </button>
     <button class="btn btn-primary" @click="Delete">
       Delete
     </button>
@@ -21,7 +24,7 @@ import QuestionDisplay from "@/components/QuestionDisplay.vue";
 
 export default {
   name: "QuestionAdminDisplay",
-  emits: ["goBack"],
+  emits: ['goBack','goEdit'],
   components: {
     QDisplay: QuestionDisplay,
   },

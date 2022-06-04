@@ -12,8 +12,8 @@
       <button class="btn btn-primary" @click="deconnexion">Deconnexion</button>
       <br>
       <QList v-if="this.adminMode=='QuestionsList'" @question-selected="questionSelected"/>
-      <QEdit v-if="this.adminMode=='QuestionsEdition'" />
-      <QDisplay v-if="this.adminMode=='QuestionAdminDisplay'" @goBack="this.adminMode='QuestionsList';" :questionPosition="questionSelectedPosition"/>
+      <QEdit v-if="this.adminMode=='QuestionsEdition'" @goBack="this.adminMode='QuestionsList';" :position="questionSelectedPosition"/>
+      <QDisplay v-if="this.adminMode=='QuestionAdminDisplay'" @goBack="this.adminMode='QuestionsList';" @goEdit="this.adminMode='QuestionsEdition';" :questionPosition="questionSelectedPosition"/>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
       password: "",
       token:"",
       adminMode:"QuestionsList",
-      questionSelectedPosition:null
+      questionSelectedPosition:null,
     };
   },
   methods: {

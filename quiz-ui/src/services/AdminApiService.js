@@ -45,6 +45,24 @@ export default {
     this.call("DELETE", "questions/"+position,null,token);
   },
 
+  editQuestion(oldposition,text, title, image, position, texteA, answerA, texteB, answerB, texteC, answerC, texteD, answerD,token) {
+    console.debug("editQuestion");
+    let payload = {
+      "text": text,
+      "title": title,
+      "image": image,
+      "position": position,
+      "possibleAnswers":
+        [
+          { "text": texteA, "isCorrect": answerA },
+          { "text": texteB, "isCorrect": answerB },
+          { "text": texteC, "isCorrect": answerC },
+          { "text": texteD, "isCorrect": answerD },
+        ]
+    }
+    this.call("PUT", "questions/"+oldposition,payload,token);
+  },
+
   postAddQuestion(text, title, image, position, texteA, answerA, texteB, answerB, texteC, answerC, texteD, answerD,token) {
     console.debug("postAddQuestion");
     let payload = {
