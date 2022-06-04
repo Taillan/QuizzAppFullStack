@@ -6,9 +6,12 @@
     v-for="(answerEntry, index) in this.question.possibleAnswers"
     v-bind:key="answerEntry.text"
   >
-    <button class="btn btn-primary" @click="$emit('answer-selected', index,answerEntry.isCorrect)">
+    <button v-if="!this.admin" class="btn btn-primary" @click="$emit('answer-selected', index,answerEntry.isCorrect)">
       {{ answerEntry.text }}
     </button>
+    <p v-if="this.admin" @click="$emit('answer-selected', index,answerEntry.isCorrect)">
+      {{index}} - {{ answerEntry.text }} -{{ answerEntry.isCorrect }}
+    </p>
   </div>
 </template>
 
@@ -28,6 +31,7 @@ export default {
   },
   methods: {},
   props: {
+    admin:Boolean,
     question: {
       type: Object,
     },

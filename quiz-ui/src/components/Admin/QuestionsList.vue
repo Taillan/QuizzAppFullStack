@@ -8,7 +8,7 @@
     @form-completed="addNewQuestion"/>
     </div>
   <div v-for="question in this.questionList" v-bind:key="question.position">
-    <router-link :to="'question'+question.position" >{{ question.position }} - {{ question.title }} </router-link>
+    <router-link to="" @click="$emit('question-selected', question.position)" >{{ question.position }} - {{ question.title }} </router-link>
   </div>
 </template>
 
@@ -19,6 +19,7 @@ import QuestionForm from "@/components/Admin/QuestionForm.vue";
 
 export default {
   name: "QuestionList",
+  emits: ["question-selected"],
   components: {
     QForm: QuestionForm,
   },
@@ -30,16 +31,20 @@ export default {
   },
   async created() {
     console.log("Composant Admin page 'created'");
-    let response = await AdminApiService.getAllQuestion();
-    this.questionList = response.data
-    console.log(this.questionList);
+    this.updateQuestionList();
   },
 
   methods: {
     async addNewQuestion(text,title,image,position,textA,answerA,textB,answerB,textC,answerC,textD,answerD){
       await AdminApiService.postAddQuestion(text,title,image,parseInt(position),textA,answerA,textB,answerB,textC,answerC,textD,answerD,AdminStorageService.getAdminToken());
-    this.showForm = false;
-  },},
+      this.showForm = false;
+      this.updateQuestionList();
+    },
+    async updateQuestionList(){
+      let response = await AdminApiService.getAllQuestion();
+      this.questionList = response.data.sort(function(a, b) {return  a.position -b.position;});
+    }
+  },
 };
 </script>
 

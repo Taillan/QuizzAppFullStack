@@ -40,6 +40,11 @@ export default {
     return response;
   },
 
+  deleteQuestion(position,token) {
+    console.debug("deleteQuestion");
+    this.call("DELETE", "questions/"+position,null,token);
+  },
+
   postAddQuestion(text, title, image, position, texteA, answerA, texteB, answerB, texteC, answerC, texteD, answerD,token) {
     console.debug("postAddQuestion");
     let payload = {

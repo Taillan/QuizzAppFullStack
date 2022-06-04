@@ -34,7 +34,10 @@
     <br>
     <textarea v-model="textD" placeholder="Answer D"></textarea>
     <input type="radio" id="one" value="D" v-model="picked" @click="answerA=false;answerB=false;answerC=false;answerD=true">
-    <label for="AnswerD" >IsCorrect</label>
+    <label for="AnswerD" >IsCorrect</label>    
+    <br>
+    <ImageUpload @file-change="imageChange"/> 
+    <img v-if="this.image" :src="this.image" />
     <br> 
     <button class="btn btn-primary" @click="$emit('form-completed', this.text,this.title,this.image,this.position,this.textA,this.answerA,this.textB,this.answerB,this.textC,this.answerC,this.textD,this.answerD)">{{actionForm}}</button>
 
@@ -42,12 +45,16 @@
 </template>
 
 <script>
+import ImageUpload from "@/components/ImageUpload.vue";
 
 export default {
-  name: "AdminPage",
+  name: "QuestionForm",
   emits: ["form-completed"],
   props: {
     actionForm: String,
+  },
+  components: {
+    ImageUpload: ImageUpload,
   },
   data() {
     return {
@@ -74,6 +81,11 @@ export default {
   },
 
   methods: {
+    imageChange(dataUrl){
+      if(dataUrl)this.image=dataUrl;
+      else{this.image="falseb64imagecontent";}
+      console.log(dataUrl," ",this.image);
+    }
   },
 };
 </script>

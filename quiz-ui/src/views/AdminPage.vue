@@ -2,22 +2,18 @@
   <div class="AdminPage">
     <div class="LoginDiv" v-if="!this.token">
       <input type="Password" placeholder="Password" v-model="password" />
-      <button class="btn btn-primary" @click="login ">Login</button>
+      <button class="btn btn-primary" @click="login">Login</button>
       <h1 v-if="wrongpassword" style="color:red">Wrong password</h1>
     </div>
 
     <div class="AdminModeDiv" v-if="this.token">
       
       <h1>AdminMode :</h1>
-      <select v-model="adminMode">
-        <option disabled value="">Choisissez le mode</option>
-        <option>QuestionsList</option>
-        <option>QuestionsEdition</option>
-        <option>QuestionAdminDisplay</option>
-      </select>
-      <QList v-if="this.adminMode=='QuestionsList'"/>
-      <QEdit v-if="this.adminMode=='QuestionsEdition'"/>
-      <QEdit v-if="this.adminMode=='QuestionAdminDisplay'"/>
+      <button class="btn btn-primary" @click="deconnexion">Deconnexion</button>
+      <br>
+      <QList v-if="this.adminMode=='QuestionsList'" @question-selected="questionSelected"/>
+      <QEdit v-if="this.adminMode=='QuestionsEdition'" />
+      <QDisplay v-if="this.adminMode=='QuestionAdminDisplay'" @goBack="this.adminMode='QuestionsList';" :questionPosition="questionSelectedPosition"/>
     </div>
   </div>
 </template>
@@ -41,13 +37,19 @@ export default {
       wrongpassword:false,
       password: "",
       token:"",
-      adminMode:""
+      adminMode:"QuestionsList",
+      questionSelectedPosition:null
     };
   },
   methods: {
     async created() {
       console.log("Composant AdminPage page 'created'");
     },
+    questionSelected(position){
+      this.questionSelectedPosition = position;
+      this.adminMode='QuestionAdminDisplay';
+    }
+    ,
     async login(){
       let response 
       try{
@@ -58,7 +60,12 @@ export default {
         this.wrongpassword=true;
       }
 
-    }
+    },
+    deconnexion(){
+      console.log("Deconnexion");
+      AdminStorageService.clear();
+      this.token="";
+    },
   },
 };
 </script>

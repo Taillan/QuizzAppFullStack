@@ -1,61 +1,56 @@
 <template>
-  <div class="QuestionForm">
-    <input type="Username" placeholder="title" v-model="username" />
-    <br>
-    <textarea v-model="message" placeholder="text"></textarea>
-    <br>
-    <textarea v-model="message" placeholder="position"></textarea>
-    <br>
-    <textarea v-model="message" placeholder="Answer A"></textarea>
-    <input type="radio" id="one" value="A" v-model="picked">
-    <label for="AnswerA">IsCorrect</label>
-    <br> 
-    <textarea v-model="message" placeholder="Answer B"></textarea>
-    <input type="radio" id="one" value="B" v-model="picked">
-    <label for="AnswerB">IsCorrect</label>
-    <br> 
-    <textarea v-model="message" placeholder="Answer C"></textarea>
-    <input type="radio" id="one" value="C" v-model="picked">
-    <label for="AnswerC">IsCorrect</label>
-    <br> 
-    <textarea v-model="message" placeholder="Answer D"></textarea>
-    <input type="radio" id="one" value="D" v-model="picked">
-    <label for="AnswerD">IsCorrect</label>
-    <br> 
-    <button class="btn btn-primary" @click="addNewQuestion">SubmitQuestion</button>
+  <div class="QuestionAdminDisplay">
+    <button class="btn btn-primary" @click="$emit('goBack')">
+      go Back
+    </button>
+    <QDisplay
+    :question="currentQuestion"
+    :admin="true"></QDisplay>
+    <button class="btn btn-primary" @click="Delete">
+      Delete
+    </button>
 
-<br>
-
-<br>
   </div>
 </template>
 
 <script>
+import quizApiService from "@/services/QuizApiService";
+import AdminApiService from "@/services/AdminApiService";
+import AdminStorageService from "@/services/AdminStorageService";
+import QuestionDisplay from "@/components/QuestionDisplay.vue";
 
 export default {
-  name: "AdminPage",
+  name: "QuestionAdminDisplay",
+  emits: ["goBack"],
+  components: {
+    QDisplay: QuestionDisplay,
+  },
+  props: {
+    questionPosition:Number
+  },
   data() {
     return {
-      picked:"",
-      answerChoice:"",
-      answerA:false,
-      answerB:false,
-      answerC:false,
-      answerD:false,
-      showForm:false,
-      questionList: [],
+      currentQuestion: {},
     };
   },
   async created() {
-    console.log("Composant QuestionForm page 'created'");
+    console.log("Composant QuestionAdminDisplay page 'created'");
+    let tempQuestion = await quizApiService.getQuestionByPosition(this.questionPosition);
+    this.currentQuestion = tempQuestion.data;
+    console.log(this.currentQuestion );
   },
 
-  methods: {},
+  methods: {
+    Delete(){
+      this.$emit('goBack');
+      AdminApiService.deleteQuestion(this.questionPosition,AdminStorageService.getAdminToken());
+    }
+  },
 };
 </script>
 
 <style>
-.QuestionForm {
+.QuestionAdminDisplay {
   flex-wrap: wrap;
   flex-direction: column  ;
 }
