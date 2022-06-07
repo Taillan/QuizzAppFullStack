@@ -1,15 +1,15 @@
 <template>
   <div class="text-center">
     <h1 class="mb-4">Questions list</h1>
-      <button class="btn btn-primary mb-4" @click="this.showForm = !this.showForm">Add New Question</button>
-      <div class="AddQuestionDiv" v-if="this.showForm">
+      <button class="btn btn-primary mb-4" @click="this.showForm = !this.showForm;this.showList = !this.showList" >Add New Question</button>
+      <div class="AddQuestionDiv" v-if="this.showForm" >
         <QForm 
         actionForm="Send Question"
       @form-completed="addNewQuestion"/>
       </div>
       
-      <div class="list-group">
-        <div v-for="question in this.questionList" v-bind:key="question.position">
+      <div class="list-group" v-if="this.showList">
+        <div v-for="question in this.questionList" v-bind:key="question.position" >
           <router-link class="list-group-item list-group-item-action" to="" @click="$emit('question-selected', question.position)" >
             {{ question.position }} - {{ question.title }}
           </router-link>
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       showForm:false,
+      showList:true,
       questionList: [],
     };
   },
@@ -44,6 +45,7 @@ export default {
     async addNewQuestion(text,title,image,position,textA,answerA,textB,answerB,textC,answerC,textD,answerD){
       await AdminApiService.postAddQuestion(text,title,image,parseInt(position),textA,answerA,textB,answerB,textC,answerC,textD,answerD,AdminStorageService.getAdminToken());
       this.showForm = false;
+      this.showList = true;
       this.updateQuestionList();
     },
     async updateQuestionList(){
