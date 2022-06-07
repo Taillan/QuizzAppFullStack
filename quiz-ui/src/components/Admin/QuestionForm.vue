@@ -12,7 +12,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text" id="position">position</span>
       </div>
-      <input type="text" class="form-control" aria-label="position" aria-describedby="position" v-model="pose">
+      <input @keypress="onlyNumber" type="number" class="form-control" aria-label="position" aria-describedby="position" v-model="pose">
     </div>
 
     <div class="input-group mb-3">
@@ -71,7 +71,7 @@
     </div>  
     
     <ImageUpload @file-change="imageChange"/> 
-    <img v-if="this.image" :src="this.image" />
+    <img v-if="this.image" :src="this.image" style="max-height: 35rem;"/>
     <br class="mb-4"/>
     <button class="btn btn-primary mb-4" @click="$emit('form-completed', this.text,this.title,this.image,this.pose,this.textA,this.answerA,this.textB,this.answerB,this.textC,this.answerC,this.textD,this.answerD)">{{actionForm}}</button>
 
@@ -103,7 +103,7 @@ export default {
       textC:"",
       textD:"",
       text:"",
-      image:"falseb64imagecontent",
+      image:"",
       answerA:false,
       answerB:false,
       answerC:false,
@@ -136,8 +136,14 @@ export default {
   methods: {
     imageChange(dataUrl){
       if(dataUrl)this.image=dataUrl;
-      else{this.image="falseb64imagecontent";}
+      else{this.image="";}
       console.log(dataUrl," ",this.image);
+    },
+    onlyNumber ($event) {
+      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 is dot
+          $event.preventDefault();
+      }
     }
   },
 };
