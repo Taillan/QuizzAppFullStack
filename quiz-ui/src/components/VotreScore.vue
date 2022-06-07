@@ -1,7 +1,7 @@
 <template>
   GG {{currentPlayer}}, tu as fini avec un score de {{finalScore}}
   Tu es {{scoreClassement}} sur {{numberOfParticipant}}
-  <router-link to="/">Retour a l'acceuil</router-link><div v-for="scoreEntry in this.registeredScores" v-bind:key="scoreEntry.date">
+  <router-link to="/">Retour a l'accueil</router-link><div v-for="scoreEntry in this.registeredScores" v-bind:key="scoreEntry.date">
     {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
   </div>
 </template>
