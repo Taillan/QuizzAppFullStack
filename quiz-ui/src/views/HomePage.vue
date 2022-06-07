@@ -1,9 +1,11 @@
 <template>
-  <h1>Home page</h1>
-  <router-link to="/start-new-quiz-page">Démarrer le quiz !</router-link>
-  <div v-for="scoreEntry in this.registeredScores" v-bind:key="scoreEntry.date">
-    {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
-  </div>
+  <h1 class="text-center pt-4">Home</h1>
+  <router-link to="/start-new-quiz-page" class="btn btn-block btn-primary mt-4">Démarrer le quiz !</router-link>
+  <ul class="list-group mt-4">
+    <li class="list-group-item mb-0" v-for="scoreEntry in this.registeredScores" v-bind:key="scoreEntry.date">
+      {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
+    </li>
+  </ul>
 </template>
 
 <script>

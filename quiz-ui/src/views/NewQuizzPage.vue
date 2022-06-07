@@ -1,9 +1,13 @@
 <template>
   <div class="NewQuizzPage">
+    <h1 class="text-center pt-4">New Quizz</h1>
     <p>Saisissez votre nom:</p>
-    <input type="Username" placeholder="username" v-model="username" />
-    <button class="btn btn-primary" @click="launchNewQuiz">GO !</button>
-    <p>{{ username }}</p>
+    <div class="LoginDiv input-group mb-3 mt-4" v-if="!this.token">
+      <input type="Username" class="form-control" placeholder="username" v-model="username" v-on:keyup.enter="launchNewQuiz" />
+      <div class="input-group-append">
+        <button class="btn btn-primary" @click="launchNewQuiz">GO !</button>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -1,17 +1,20 @@
 <template>
-  <div class="QuestionAdminDisplay">
-    <button class="btn btn-primary" @click="$emit('goBack')">
-      go Back
-    </button>
+  <div class="QuestionAdminDisplay text-center">
+    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+      <button class="btn btn-primary" @click="$emit('goBack')">
+        Back
+      </button>
+      <button class="btn btn-primary" @click="$emit('goEdit')">
+        Edit
+      </button>
+      <button class="btn btn-primary" @click="Delete">
+        Delete
+      </button>
+    </div>
     <QDisplay
     :question="currentQuestion"
     :admin="true"></QDisplay>
-    <button class="btn btn-primary" @click="$emit('goEdit')">
-      Edit
-    </button>
-    <button class="btn btn-primary" @click="Delete">
-      Delete
-    </button>
+    
 
   </div>
 </template>

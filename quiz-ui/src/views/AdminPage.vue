@@ -1,15 +1,16 @@
 <template>
   <div class="AdminPage">
-    <div class="LoginDiv" v-if="!this.token">
-      <input type="Password" placeholder="Password" v-model="password" />
-      <button class="btn btn-primary" @click="login">Login</button>
-      <h1 v-if="wrongpassword" style="color:red">Wrong password</h1>
+    <h1 class="text-center pt-4">Admin panel</h1>
+    <div class="LoginDiv input-group mb-3 mt-4" v-if="!this.token">
+      <input type="Password" class="form-control" placeholder="Password" v-model="password" v-on:keyup.enter="login" />
+      <div class="input-group-append">
+        <button class="btn btn-primary" @click="login">Login</button>
+      </div>
     </div>
+    <div v-if="wrongpassword" class="alert alert-danger" role="alert">Wrong password</div>
 
-    <div class="AdminModeDiv" v-if="this.token">
-      
-      <h1>AdminMode :</h1>
-      <button class="btn btn-primary" @click="deconnexion">Deconnexion</button>
+    <div class="AdminModeDiv text-center" v-if="this.token">
+      <button class="btn btn-lg btn-primary m-4" @click="deconnexion">Deconnexion</button>
       <br>
       <QList v-if="this.adminMode=='QuestionsList'" @question-selected="questionSelected"/>
       <QEdit v-if="this.adminMode=='QuestionsEdition'" @goBack="this.adminMode='QuestionsList';" :position="questionSelectedPosition"/>
@@ -56,6 +57,7 @@ export default {
       response = await AdminApiService.postLogin(this.password);
       this.token=response.data.token;
       AdminStorageService.saveAdminToken(this.token);
+      this.wrongpassword=false;
       }catch(error){
         this.wrongpassword=true;
       }

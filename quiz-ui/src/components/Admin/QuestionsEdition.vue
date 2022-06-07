@@ -5,7 +5,7 @@
       :position="this.position"
       @form-completed="editQuestion"/>
     <button class="btn btn-primary" @click="$emit('goBack')">
-      dont save
+      Discard changes
     </button>
 </template>
 

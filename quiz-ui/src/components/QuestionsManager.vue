@@ -1,5 +1,5 @@
 <template>
-  <h1>Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1>
+  <h1 class="text-center">Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1>
   <QDisplay
     :question="currentQuestion"
     @answer-selected="answerClickedHandler"

@@ -1,14 +1,20 @@
 <template>
-  <h1>Question list page</h1>
-    <button class="btn btn-primary" @click="this.showForm = !this.showForm">Add New Question</button>
-    <br>
-    <div class="AddQuestionDiv" v-if="this.showForm">
-      <QForm 
-      actionForm="Send Question"
-    @form-completed="addNewQuestion"/>
-    </div>
-  <div v-for="question in this.questionList" v-bind:key="question.position">
-    <router-link to="" @click="$emit('question-selected', question.position)" >{{ question.position }} - {{ question.title }} </router-link>
+  <div class="text-center">
+    <h1 class="mb-4">Questions list</h1>
+      <button class="btn btn-primary mb-4" @click="this.showForm = !this.showForm">Add New Question</button>
+      <div class="AddQuestionDiv" v-if="this.showForm">
+        <QForm 
+        actionForm="Send Question"
+      @form-completed="addNewQuestion"/>
+      </div>
+      
+      <div class="list-group">
+        <div v-for="question in this.questionList" v-bind:key="question.position">
+          <router-link class="list-group-item list-group-item-action" to="" @click="$emit('question-selected', question.position)" >
+            {{ question.position }} - {{ question.title }}
+          </router-link>
+        </div>
+      </div>
   </div>
 </template>
 

@@ -1,45 +1,79 @@
 <template>
   <div class="QuestionForm">
-    <label for="title">title</label>
-    <br>
-    <input type="Username" placeholder="title" v-model="title" />
-    <br>
-    <label for="position">position</label>
-    <br>
-    <input type="position" placeholder="position" v-model="pose" />
-    <br>
-    <label for="text">text</label>
-    <br>
-    <textarea v-model="text" placeholder="text"></textarea>
-    <br>
-    <label for="AnswerA">Answer A</label>
-    <br>
-    <textarea v-model="textA" placeholder="Answer A"></textarea>
-    <input type="radio" id="one" value="A" :checked="answerA" v-model="picked" @click="answerA=true;answerB=false;answerC=false;answerD=false">
-    <label for="AnswerA">IsCorrect</label>
-    <br> 
-    <label for="AnswerB">Answer B</label>
-    <br>
-    <textarea v-model="textB" placeholder="Answer B"></textarea>
-    <input type="radio" id="one" value="B" :checked="answerB" v-model="picked" @click="answerA=false;answerB=true;answerC=false;answerD=false">
-    <label for="AnswerB">IsCorrect</label>
-    <br> 
-    <label for="AnswerC">Answer C</label>
-    <br>
-    <textarea v-model="textC" placeholder="Answer C"></textarea>
-    <input type="radio" id="one" value="C" :checked="answerC" v-model="picked" @click="answerA=false;answerB=false;answerC=true;answerD=false">
-    <label for="AnswerC">IsCorrect</label>
-    <br> 
-    <label for="AnswerD">Answer D</label>
-    <br>
-    <textarea v-model="textD" placeholder="Answer D"></textarea>
-    <input type="radio" id="one" value="D" :checked="answerD" v-model="picked" @click="answerA=false;answerB=false;answerC=false;answerD=true">
-    <label for="AnswerD" >IsCorrect</label>    
-    <br>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="title">title</span>
+      </div>
+      <input type="text" class="form-control" aria-label="title" aria-describedby="title" v-model="title">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="position">position</span>
+      </div>
+      <input type="text" class="form-control" aria-label="position" aria-describedby="position" v-model="pose">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="text">text</span>
+      </div>
+      <input type="text" class="form-control" aria-label="text" aria-describedby="text" v-model="text">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="AnswerA">Answer A</span>
+      </div>
+      <input type="text" class="form-control" aria-label="AnswerA" aria-describedby="AnswerA" v-model="textA">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="AnswerB">Answer B</span>
+      </div>
+      <input type="text" class="form-control" aria-label="AnswerB" aria-describedby="AnswerB" v-model="textB">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="AnswerC">Answer C</span>
+      </div>
+      <input type="text" class="form-control" aria-label="AnswerC" aria-describedby="AnswerC" v-model="textC">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="AnswerD">Answer D</span>
+      </div>
+      <input type="text" class="form-control" aria-label="AnswerD" aria-describedby="AnswerD" v-model="textD">
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text mr-2">Is A Correct</span>
+      <input type="radio" class="form-check" id="one" value="A" :checked="answerA" v-model="picked" @click="answerA=true;answerB=false;answerC=false;answerD=false">
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text mr-2">Is B Correct</span>
+      <input type="radio" id="one" value="B" :checked="answerB" v-model="picked" @click="answerA=false;answerB=true;answerC=false;answerD=false">
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text mr-2">Is C Correct</span>
+      <input type="radio" id="one" value="C" :checked="answerC" v-model="picked" @click="answerA=false;answerB=false;answerC=true;answerD=false">
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text mr-2">Is D Correct</span>
+      <input type="radio" id="one" value="D" :checked="answerD" v-model="picked" @click="answerA=false;answerB=false;answerC=false;answerD=true">
+    </div>  
+    
     <ImageUpload @file-change="imageChange"/> 
     <img v-if="this.image" :src="this.image" />
-    <br> 
-    <button class="btn btn-primary" @click="$emit('form-completed', this.text,this.title,this.image,this.pose,this.textA,this.answerA,this.textB,this.answerB,this.textC,this.answerC,this.textD,this.answerD)">{{actionForm}}</button>
+    <br class="mb-4"/>
+    <button class="btn btn-primary mb-4" @click="$emit('form-completed', this.text,this.title,this.image,this.pose,this.textA,this.answerA,this.textB,this.answerB,this.textC,this.answerC,this.textD,this.answerD)">{{actionForm}}</button>
 
   </div>
 </template>
