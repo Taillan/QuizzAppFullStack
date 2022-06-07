@@ -46,7 +46,7 @@ export default {
 
     console.log(this.scoreBoard);
     this.scoreBoard.forEach((el, index) => {
-      if (el < this.finalScore){
+      if (el <= this.finalScore){
         this.scoreClassement =  this.numberOfParticipant - index ;
         return;
       } 

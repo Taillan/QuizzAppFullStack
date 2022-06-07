@@ -6,7 +6,7 @@
       <p class="card-text">{{ question.text }}</p>
       <div v-if="!this.admin" class="btn-group" style="flex-wrap: wrap;" role="group">
         <div v-for="(answerEntry, index) in this.question.possibleAnswers" v-bind:key="answerEntry.text">
-          <button class="btn btn-primary mr-2 mb-1" @click="$emit('answer-selected', index,answerEntry.isCorrect)">
+          <button class="btn btn-primary mr-2 mb-1" @click="$emit('answer-selected', index+1,answerEntry.isCorrect)">
             {{ answerEntry.text }}
           </button>
         </div>
